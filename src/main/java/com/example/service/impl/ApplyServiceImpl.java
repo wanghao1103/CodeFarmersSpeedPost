@@ -6,6 +6,8 @@ import com.example.service.IApplyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * <p>
  *  服务实现类
@@ -17,4 +19,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplyServiceImpl extends ServiceImpl<ApplyMapper, Apply> implements IApplyService {
 
+    @Resource
+    private ApplyMapper applyMapper;
+
+
+    @Override
+    public int insertApply(Long wid, Long jid) {
+        return applyMapper.addApply(wid,jid);
+    }
+
+    @Override
+    public int queryApply(Long wid, Long jid) {
+        return applyMapper.getApply(wid, jid);
+    }
 }

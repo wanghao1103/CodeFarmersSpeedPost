@@ -46,9 +46,11 @@ public class Worker implements Serializable {
 
     private String education;
 
-    private String accessory;
-
     private Integer state;
+
+    private Integer isPrivate;
+
+    private Integer userid;
 
 
 }

@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IJobneedService extends IService<Jobneed> {
 
+    Jobneed queryJobneedByJid(Long jid);
 }

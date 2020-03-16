@@ -23,6 +23,8 @@ public class Workuser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Long userid;
+
     private String wuser;
 
     private String wpassword;
@@ -33,7 +35,6 @@ public class Workuser implements Serializable {
 
     private LocalDate wregtime;
 
-    private Long wid;
 
 
 }

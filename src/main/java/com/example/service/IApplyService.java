@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-03-05
  */
 public interface IApplyService extends IService<Apply> {
-
+    int insertApply(Long wid, Long jid);
+    int queryApply(Long wid, Long jid);
 }

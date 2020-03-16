@@ -47,5 +47,10 @@ public class Job implements Serializable {
     @TableField("putDate")
     private LocalDateTime putDate;
 
+    @TableField("cid")
+    private Integer cid;
 
+    private String cname;
+
+    private String address;
 }

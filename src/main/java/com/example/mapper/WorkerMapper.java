@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-03-05
  */
 public interface WorkerMapper extends BaseMapper<Worker> {
-
+    Long getWidByUserid(Long userid);
 }

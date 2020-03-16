@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-03-05
  */
 public interface JobneedMapper extends BaseMapper<Jobneed> {
-
+        Jobneed getJobneedByJid(Long jid);
 }

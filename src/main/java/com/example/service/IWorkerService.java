@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-03-05
  */
 public interface IWorkerService extends IService<Worker> {
-
+    Long queryWidByUserid(Long userid);
 }
