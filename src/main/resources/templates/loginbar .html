@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <script type="text/javascript" th:src="@{/js/jquery-1.12.4.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/dlstyle.css}" type="text/css"/>
+    <style>
+        #sendBtn{
+            width: 90px;
+            width: 150px;
+            height: 30px;
+            background-color: #39a6eb;
+            color: #fff;
+        }
+    </style>
+</head>
+<body style="text-align: center;">
+<h2>企业登录</h2>
+<div class="section">
+    <div class="all">
+        <div class="nav">
+            <a class="login on">普通登录</a>
+            <a class="login">手机验证码登录</a>
+        </div>
+        <div class="contentbox">
+            <div class="box active">
+                <div class="cont-1">
+                    <form action="/demo/workuser/u" onsubmit="f();">
+                    <input id="user" class="q" name="wuser" type="text" placeholder="用户名">
+                    <input id="password" class="q" name="wpassword" type="password" placeholder="密码">
+                    <br/>
+                    <span class="field">
+                   <input class="q" id="vercode" type="text" name="verify_code" maxlength="4" placeholder="验证码">
+                                      <span class="error" style="display: inline;"></span>
+                                           </span>
+                    <br/>
+                    <span class="field vcode" data-type="vcode">
+                                   <img  width="120" id="verify_code_img" height="32" src="code" onclick="javascript:changeImg()">
+                           <a href="#" class="doc-color-link desc" onclick="javascript:changeImg()">看不清，换一个？</a>
+                                   </span>
+                    <button class="btn">登&nbsp;&nbsp;录</button>
+                    </form>
+                </div>
+                <div class="about"><a href="/demo/workuser/Login">&nbsp;&nbsp;注册&nbsp;&nbsp;</a><span></span><a href="/demo/companyuser/ente">&nbsp;&nbsp;企业登录</a></div>
+            </div>
+            <div class="box">
+                <div class="cont-1">
+                    <form action="/demo/workuser/fiu">
+                        <input id="wphone" class="q" name="wphone" type="text" placeholder="手机号" style="line-height: 46px;padding-left: 40px;">
+                        <input  placeholder="请输入验证码" autocomplete="off" id="code" name="code" maxlength="6" class="q layui-input" style="line-height: 46px;
+                               padding-left: 40px;">
+                        <br/>
+                        <input type="button" class="layui-btn layui-btn-primary" value="获取验证码" id="sendBtn" style="width:41%; margin-left: 120px;
+        min-width:14%;border-color:#1e9fff !important;" onclick="sendCode(this)"></input>
+                        <input id="y" type="submit" name="" value="登 录" class="btn">
+                        <div class="about"><a href="/demo/workuser/Login">&nbsp;&nbsp;注册&nbsp;&nbsp;</a><span></span><a href="/demo/companyuser/ente">&nbsp;&nbsp;企业登录</a></div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" >
+    $().ready(function(){
+        $(function(){
+            $(".nav a").off("click").on("click",function(){
+                var index = $(this).index();
+                $(this).addClass("on").siblings().removeClass("on");
+                $(".contentbox .box").eq(index).addClass("active").siblings().removeClass("active");
+            });
+        });
+    });
+    function changeImg(){
+        var img = document.getElementById("verify_code_img");
+        img.src = "code?date=" + new Date();
+    }
+        function f() {
+            var name = $("#user").val();
+            var password = $("#password").val();
+            var yan = $("#vercode").val();
+            if(name==null||name==""){
+                alert("账号不能为空");
+               return false;
+            }
+            if(password==null||password==""){
+                alert("密码不能为空");
+               return false;
+            }
+            if(yan==null||yan==""){
+                alert("验证码不能为空");
+               return window.location.hrer("/user");
+            }
+            return true;
+        }
+    function sendCode(){
+        var wphone = $("#wphone").val();
+        if(wphone == '' || wphone.length != 11){
+            alert("请输入正确的手机号！");
+            return;
+        }else{
+            $.ajax({
+                type: 'GET',
+                url: '/demo/workuser/fitness/code',
+                data: {
+                    wphone : wphone
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if(data){
+                        timer();
+                    }else{
+                        alert("获取验证码失败");
+                    }
+                },
+                error: function(data) {
+                    alert('连接超时！');
+                },
+            });
+        }
+    }
+    var wait = 60;
+    //倒计时
+    function timer() {
+        if(wait == 0){
+            $("#sendBtn").val("获取验证码");
+            $("#sendBtn").removeAttr("disabled");
+            $("#sendBtn").css("border-color","1e9fff").css("background", "#ffffff").css("cursor", "pointer");
+            wait = 60;
+        }else{
+            $("#sendBtn").attr("disabled","true");
+            $("#sendBtn").css("border-color","fbfbfb").css("background", "#ccc").css("cursor", "not-allowed");
+            $("#sendBtn").val(wait + "秒后重发");
+            wait--;
+            setTimeout(function() {timer()}, 1000);
+        }
+    }
+</script>
+</body>
+</html>

@@ -9,8 +9,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author wanghao
- * @since 2020-03-05
+ * @since 2020-03-04
  */
 public interface IWorkuserService extends IService<Workuser> {
-
+        Workuser Login(String wuser, String wpassword);
+        int add(String wuser,String wpassword,String wphone,String wemail);
 }
