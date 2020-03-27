@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.entity.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.util.Screen;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,8 +18,7 @@ import java.util.List;
 public interface IJobService extends IService<Job> {
     List<Job> queryJobListByQuery(String jname,String address);
     List<Job> queryJobList();
-    List<Job> queryJobListScreen(String jname,String address,int day,float min,
-                                 float max,int natureid, int minyears,int maxyears,String education,int minscale,int maxscale);
+    List<Job> queryJobListScreen(String jname, String address, Screen screen);
     Job queryJobById(Long jid);
 
 

@@ -1,21 +1,22 @@
 package com.example.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.alibaba.fastjson.JSONArray;
+import com.example.entity.City;
 import com.example.entity.Job;
 import com.example.entity.Jobneed;
 import com.example.entity.Workuser;
-import com.example.service.IApplyService;
-import com.example.service.IJobService;
-import com.example.service.IJobneedService;
-import com.example.service.IWorkerService;
+import com.example.service.*;
+import com.example.util.Screen;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -42,9 +43,16 @@ public class JobController {
     @Resource
     private IWorkerService iWorkerService;
 
+    @Resource
+    private ICityService iCityService;
+
+    private Screen screen = new Screen();
+
     @RequestMapping("/postIndex")
     public String postIndex(Model model){
+        List<City> cities = iCityService.list();
         List<Job> jobs = iJobService.queryJobList();
+        model.addAttribute("cities",cities);
         model.addAttribute("jobs",jobs);
         return "postList";
     }
@@ -53,45 +61,15 @@ public class JobController {
      * 按照时间查询招聘信息
      * @return
      */
+    @ResponseBody
     @RequestMapping("/postByTime/{day}")
-    public String postByTime(@PathVariable("day") String day, Model model,HttpSession session){
+    public String postByTime(@PathVariable("day") Integer day,HttpSession session){
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
-        String minpay = (String) session.getAttribute("minpay");
-        String maxpay = (String) session.getAttribute("maxpay");
-        String natureid = (String) session.getAttribute("natureid");
-        String minyears = (String) session.getAttribute("minyears");
-        String maxyears = (String) session.getAttribute("maxyears");
-        String education = (String) session.getAttribute("education");
-        String minscale = (String) session.getAttribute("minscale");
-        String maxscale = (String) session.getAttribute("maxscale");
-        int daY = Integer.parseInt(day);
-        float minPay = 0;
-        float maxPay = 0;
-        int natureId = 0;
-        int minYears = -1;
-        int maxYears = 0;
-        int minScale = 0;
-        int maxScale = 0;
-        if(minpay != null)
-            minPay = Float.parseFloat(minpay);
-        if(maxpay != null)
-            maxPay = Float.parseFloat(maxpay);
-        if(natureid != null)
-            natureId = Integer.parseInt(natureid);
-        if(minyears !=null)
-            minYears = Integer.parseInt(minyears);
-        if(maxyears != null){
-            maxYears = Integer.parseInt(maxyears);
-        }
-        if(minscale !=null)
-            minScale = Integer.parseInt(minscale);
-        if(maxscale !=null)
-            maxScale = Integer.parseInt(maxscale);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, daY, minPay, maxPay,natureId,minYears,maxYears,education,minScale,maxScale);
-        model.addAttribute("jobs",jobs);
-        session.setAttribute("day",day);
-        return "postList";
+        screen.setDay(day);
+        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
+        System.out.println(JSONArray.toJSONString(jobs));
+        return JSONArray.toJSONString(jobs);
     }
 
     /**
@@ -100,242 +78,72 @@ public class JobController {
      * @param address 公司地址
      * @return
      */
+    @ResponseBody
     @RequestMapping("/search")
-    public String query(String jname, String address, Model model, HttpSession session){
+    public String query(@RequestParam("jname")String jname,@RequestParam("address")String address, HttpSession session){
         session.setAttribute("address",address);
         session.setAttribute("jname",jname);
         List<Job> jobs = iJobService.queryJobListByQuery(jname, address);
-        session.removeAttribute("minpay");
-        session.removeAttribute("maxpay");
-        session.removeAttribute("natureid");
-        session.removeAttribute("minyears");
-        session.removeAttribute("maxyears");
-        session.removeAttribute("education");
-        session.removeAttribute("minscale");
-        session.removeAttribute("maxscale");
-        session.removeAttribute("day");
-        model.addAttribute("jobs",jobs);
-        return "postList";
+        return JSONArray.toJSONString(jobs);
     }
 
     /**
      * 按照薪资区间查询招聘信息
      * @param min 薪资最小值
      * @param max 薪资最大值
-     * @param model
      * @param session
      * @return
      */
+    @ResponseBody
     @RequestMapping("/postByPay/{min}/{max}")
-    public String postByPay(@PathVariable("min")String min,@PathVariable("max")String max,Model model,HttpSession session){
+    public String postByPay(@PathVariable("min")Float min,@PathVariable("max")Float max,HttpSession session){
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
-        String natureid = (String) session.getAttribute("natureid");
-        String minyears = (String) session.getAttribute("minyears");
-        String maxyears = (String) session.getAttribute("maxyears");
-        String education = (String) session.getAttribute("education");
-        String minscale = (String) session.getAttribute("minscale");
-        String maxscale = (String) session.getAttribute("minscale");
-        String day = (String) session.getAttribute("day");
-        float minPay = 0;
-        float maxPay = 0;
-        int natureId = 0;
-        int minYears = -1;
-        int maxYears = 0;
-        int minScale = 0;
-        int maxScale = 0;
-        int daY = 0;
-        if(min != null)
-            minPay = Float.parseFloat(min);
-        if(max != null)
-            maxPay = Float.parseFloat(max);
-        if(natureid != null)
-            natureId = Integer.parseInt(natureid);
-        if(minyears !=null)
-            minYears = Integer.parseInt(minyears);
-        if(maxyears != null)
-            maxYears = Integer.parseInt(maxyears);
-        if(minscale !=null)
-            minScale = Integer.parseInt(minscale);
-        if(maxscale !=null)
-            maxScale = Integer.parseInt(maxscale);
-        if(day != null)
-            daY = Integer.parseInt(day);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, daY, minPay, maxPay,natureId,minYears,maxYears,education,minScale,maxScale);
-        session.setAttribute("minpay",min);
-        session.setAttribute("maxpay",max);
-        model.addAttribute("jobs",jobs);
-        return "postList";
+        screen.setMax(max);
+        screen.setMin(min);
+        List<Job> jobs = iJobService.queryJobListScreen(jname, address,screen);
+        return JSONArray.toJSONString(jobs);
     }
+    @ResponseBody
     @RequestMapping("/postByNature/{natureid}")
-    public String postByNature(@PathVariable("natureid") String natureid,Model model,HttpSession session){
+    public String postByNature(@PathVariable("natureid") Integer natureid,HttpSession session){
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
-        String minyears = (String) session.getAttribute("minyears");
-        String maxyears = (String) session.getAttribute("maxyears");
-        String education = (String) session.getAttribute("education");
-        String minscale = (String) session.getAttribute("minscale");
-        String maxscale = (String) session.getAttribute("minscale");
-        String minpay = (String) session.getAttribute("minpay");
-        String maxpay = (String) session.getAttribute("maxpay");
-        String day = (String) session.getAttribute("day");
-        float minPay = 0;
-        float maxPay = 0;
-        int natureId = 0;
-        int minYears = -1;
-        int maxYears = 0;
-        int minScale = 0;
-        int maxScale = 0;
-        int daY = 0;
-        if(minpay != null)
-            minPay = Float.parseFloat(minpay);
-        if(maxpay != null)
-            maxPay = Float.parseFloat(maxpay);
-        if(natureid != null)
-            natureId = Integer.parseInt(natureid);
-        if(minyears !=null)
-            minYears = Integer.parseInt(minyears);
-        if(maxyears != null)
-            maxYears = Integer.parseInt(maxyears);
-        if(minscale !=null)
-            minScale = Integer.parseInt(minscale);
-        if(maxscale !=null)
-            maxScale = Integer.parseInt(maxscale);
-        if(day != null)
-            daY = Integer.parseInt(day);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, daY, minPay, maxPay,natureId,minYears,maxYears,education,minScale,maxScale);
-        session.setAttribute("natureid",natureid);
-        model.addAttribute("jobs",jobs);
-        return "postList";
+        screen.setNatureid(natureid);
+        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
+        return JSONArray.toJSONString(jobs);
     }
-
+    @ResponseBody
     @RequestMapping("/postByYears/{minyears}/{maxyears}")
-    public String postByYears(@PathVariable("minyears") String minyears,@PathVariable("maxyears")String maxyears,Model model,HttpSession session){
+    public String postByYears(@PathVariable("minyears") Integer minyears,@PathVariable("maxyears")Integer maxyears,HttpSession session){
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
-        String education = (String) session.getAttribute("education");
-        String minscale = (String) session.getAttribute("minscale");
-        String maxscale = (String) session.getAttribute("minscale");
-        String minpay = (String) session.getAttribute("minpay");
-        String maxpay = (String) session.getAttribute("maxpay");
-        String day = (String) session.getAttribute("day");
-        String natureid = (String) session.getAttribute("natureid");
-        float minPay = 0;
-        float maxPay = 0;
-        int natureId = 0;
-        int minYears = -1;
-        int maxYears = 0;
-        int minScale = 0;
-        int maxScale = 0;
-        int daY = 0;
-        if(minpay != null)
-            minPay = Float.parseFloat(minpay);
-        if(maxpay != null)
-            maxPay = Float.parseFloat(maxpay);
-        if(natureid != null)
-            natureId = Integer.parseInt(natureid);
-        if(minyears !=null)
-            minYears = Integer.parseInt(minyears);
-        if(maxyears != null)
-            maxYears = Integer.parseInt(maxyears);
-        if(minscale !=null)
-            minScale = Integer.parseInt(minscale);
-        if(maxscale !=null)
-            maxScale = Integer.parseInt(maxscale);
-        if(day != null)
-            daY = Integer.parseInt(day);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, daY, minPay, maxPay,natureId,minYears,maxYears,education,minScale,maxScale);
-        session.setAttribute("minyears",minyears);
-        session.setAttribute("maxyears",maxyears);
-        model.addAttribute("jobs",jobs);
-        return "postList";
+        screen.setMinyears(minyears);
+        screen.setMaxyears(maxyears);
+        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
+        return JSONArray.toJSONString(jobs);
     }
-
+    @ResponseBody
     @RequestMapping(value = "/postByEdu/{edu}")
-    public String postByEdu(@PathVariable(value = "edu",required = false)String edu,Model model,HttpSession session){
+    public String postByEdu(@PathVariable(value = "edu",required = false)String edu,HttpSession session){
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
-        String minscale = (String) session.getAttribute("minscale");
-        String maxscale = (String) session.getAttribute("minscale");
-        String minpay = (String) session.getAttribute("minpay");
-        String maxpay = (String) session.getAttribute("maxpay");
-        String day = (String) session.getAttribute("day");
-        String natureid = (String) session.getAttribute("natureid");
-        String minyears = (String) session.getAttribute("minyears");
-        String maxyears = (String) session.getAttribute("maxyears");
-        float minPay = 0;
-        float maxPay = 0;
-        int natureId = 0;
-        int minYears = -1;
-        int maxYears = 0;
-        int minScale = 0;
-        int maxScale = 0;
-        int daY = 0;
-        if(minpay != null)
-            minPay = Float.parseFloat(minpay);
-        if(maxpay != null)
-            maxPay = Float.parseFloat(maxpay);
-        if(natureid != null)
-            natureId = Integer.parseInt(natureid);
-        if(minyears !=null)
-            minYears = Integer.parseInt(minyears);
-        if(maxyears != null)
-            maxYears = Integer.parseInt(maxyears);
-        if(minscale !=null)
-            minScale = Integer.parseInt(minscale);
-        if(maxscale !=null)
-            maxScale = Integer.parseInt(maxscale);
-        if(day != null)
-            daY = Integer.parseInt(day);
         if(edu.equals("所有")){
             edu = null;
         }
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, daY, minPay, maxPay,natureId,minYears,maxYears,edu,minScale,maxScale);
-        session.setAttribute("education",edu);
-        model.addAttribute("jobs",jobs);
-        return "postList";
+        screen.setEducation(edu);
+        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
+        return JSONArray.toJSONString(jobs);
     }
-
-    @RequestMapping("/postByScale//{min}/{max}")
-    public String postByScale(@PathVariable("min")String min,@PathVariable("max")String max,Model model,HttpSession session){
+    @ResponseBody
+    @RequestMapping("/postByScale/{min}/{max}")
+    public String postByScale(@PathVariable("min")Integer min,@PathVariable("max")Integer max,HttpSession session){
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
-        String minpay = (String) session.getAttribute("minpay");
-        String maxpay = (String) session.getAttribute("maxpay");
-        String day = (String) session.getAttribute("day");
-        String natureid = (String) session.getAttribute("natureid");
-        String minyears = (String) session.getAttribute("minyears");
-        String maxyears = (String) session.getAttribute("maxyears");
-        String education = (String) session.getAttribute("education");
-        float minPay = 0;
-        float maxPay = 0;
-        int natureId = 0;
-        int minYears = -1;
-        int maxYears = 0;
-        int minScale = 0;
-        int maxScale = 0;
-        int daY = 0;
-        if(minpay != null)
-            minPay = Float.parseFloat(minpay);
-        if(maxpay != null)
-            maxPay = Float.parseFloat(maxpay);
-        if(natureid != null)
-            natureId = Integer.parseInt(natureid);
-        if(minyears !=null)
-            minYears = Integer.parseInt(minyears);
-        if(maxyears != null)
-            maxYears = Integer.parseInt(maxyears);
-        if(min !=null)
-            minScale = Integer.parseInt(min);
-        if(max !=null)
-            maxScale = Integer.parseInt(max);
-        if(day != null)
-            daY = Integer.parseInt(day);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, daY, minPay, maxPay,natureId,minYears,maxYears,education,minScale,maxScale);
-        session.setAttribute("minscale",min);
-        session.setAttribute("maxscale",max);
-        model.addAttribute("jobs",jobs);
-        return "postList";
+        screen.setMinscale(min);
+        screen.setMaxscale(max);
+        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
+        return JSONArray.toJSONString(jobs);
     }
 
     /**

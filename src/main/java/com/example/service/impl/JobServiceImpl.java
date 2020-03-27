@@ -4,6 +4,7 @@ import com.example.entity.Job;
 import com.example.mapper.JobMapper;
 import com.example.service.IJobService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.util.Screen;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,9 +38,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
 
 
     @Override
-    public List<Job> queryJobListScreen(String jname,String address,int day,float min,
-                                        float max,int natureid, int minyears,int maxyears,String education,int minscale,int maxscale) {
-        return jobMapper.getJobListScreen(jname, address, day, min, max,natureid,minyears,maxyears,education,minscale,maxscale);
+    public List<Job> queryJobListScreen(String jname, String address, Screen screen) {
+        return jobMapper.getJobListScreen(jname, address, screen);
     }
 
     @Override

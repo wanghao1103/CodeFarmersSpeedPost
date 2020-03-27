@@ -1,146 +1,842 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="no-"  xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>企业岗位列表</title>
-    <style>
-        .s1{
-            width: 200px;
-            display: inline-block;
-            text-align: center;
-        }
-        .s2{
-            width: 200px;
-            display: inline-block;
-            text-align: center;
-        }
-        .s3{
-            width: 200px;
-            display: inline-block;
-            text-align: center;
-        }
-        .s4{
-            width: 50px;
-            display: inline-block;
-            text-align: center;
-        }
-        .s5{
-            width: 200px;
-            display: inline-block;
-            text-align: center;
-        }
-        .p{
-            border: 1px solid #333;
-            width: 900px;
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jobya - Responsive Job Board HTML Template</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Themesdesign" />
+    <script type="text/javascript" th:src="@{/js/jquery-1.12.4.js}"></script>
+    <link rel="shortcut icon" href=" /demo/images/favicon.ico">
 
-        }
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href=" /demo/css/bootstrap.min.css" type="text/css">
 
-        .d p a{
-            color: black;
-            text-decoration: none;
-            margin: 2px 10px;
-        }
-    </style>
+    <!--Material Icon -->
+    <link rel="stylesheet" type="text/css" href=" /demo/css/materialdesignicons.min.css" />
+
+    <link rel="stylesheet" type="text/css" href=" /demo/css/fontawesome.css" />
+
+    <!-- selectize css -->
+    <link rel="stylesheet" type="text/css" href=" /demo/css/selectize.css" />
+
+    <link rel="stylesheet" type="text/css" href=" /demo/css/nice-select.css" />
+
+    <!-- Custom  Css -->
+    <link rel="stylesheet" type="text/css" href=" /demo/css/style.css" />
+
 </head>
+
 <body>
-<form action="/demo/job/search" method="post">
-    岗位名：<input th:type="text" th:name="jname">
-    地点：<input th:type="text" th:name="address">
-    <input th:type="submit" th:value="搜索">
-
-    <div class="d">
-        <p>
-            发布日期:
-            <a href="/demo/job/postByTime/0" style="color: red">所有</a>
-            <a href="/demo/job/postByTime/1">24小时内</a>
-            <a href="/demo/job/postByTime/3">近三天</a>
-            <a href="/demo/job/postByTime/7">近一周</a>
-            <a href="/demo/job/postByTime/30">近一月</a>
-        </p>
-        <p>
-            月薪范围:
-            <a href="/demo/job/postByPay/0/-1" style="color: red">所有</a>
-            <a href="/demo/job/postByPay/0/3">3千以下</a>
-            <a href="/demo/job/postByPay/3/5">3-5千</a>
-            <a href="/demo/job/postByPay/5/6.5">5-6.5千</a>
-            <a href="/demo/job/postByPay/6.5/8">6.5-8千</a>
-            <a href="/demo/job/postByPay/8/10">0.8-1万</a>
-            <a href="/demo/job/postByPay/10/15">1-1.5万</a>
-            <a href="/demo/job/postByPay/15/20">1.5-2万</a>
-            <a href="/demo/job/postByPay/20/30">2-3万</a>
-            <a href="/demo/job/postByPay/30/40">3-4万</a>
-            <a href="/demo/job/postByPay/40/50">4-5万</a>
-            <a href="/demo/job/postByPay/50/-1">5万以上</a>
-        </p>
-        <p>
-            公司性质:
-            <a href="/demo/job/postByNature/0" style="color: red">所有</a>
-            <a href="/demo/job/postByNature/1" >国企</a>
-            <a href="/demo/job/postByNature/2" >外资</a>
-            <a href="/demo/job/postByNature/3" >上市公司</a>
-            <a href="/demo/job/postByNature/4" >合资</a>
-            <a href="/demo/job/postByNature/5" >民营</a>
-            <a href="/demo/job/postByNature/6" >政府机关</a>
-        </p>
-        <p>
-            工作年限:
-            <a href="/demo/job/postByYears/-1/-1" style="color: red">所有</a>
-            <a href="/demo/job/postByYears/1/3" >1-3年</a>
-            <a href="/demo/job/postByYears/3/5" >3-5年</a>
-            <a href="/demo/job/postByYears/5/10" >5-10年</a>
-            <a href="/demo/job/postByYears/10/-1" >10年以上</a>
-            <a href="/demo/job/postByYears/0/-1" >无需经验</a>
-        </p>
-        <p>
-            学历要求:
-            <a href="/demo/job/postByEdu/所有" style="color: red">所有</a>
-            <a href="/demo/job/postByEdu/初中">高中以下</a>
-            <a href="/demo/job/postByEdu/高中">高中/中专</a>
-            <a href="/demo/job/postByEdu/大专">大专</a>
-            <a href="/demo/job/postByEdu/本科">本科</a>
-            <a href="/demo/job/postByEdu/硕士">硕士</a>
-            <a href="/demo/job/postByEdu/博士">博士</a>
-            <a href="/demo/job/postByEdu/无">无学历要求</a>
-        </p>
-        <p>
-            公司规模:
-            <a href="/demo/job/postByScale/0/-1" style="color: red">所有</a>
-            <a href="/demo/job/postByScale/1/50">少于50人</a>
-            <a href="/demo/job/postByScale/50/150">50-150人</a>
-            <a href="/demo/job/postByScale/150/500">150-500人</a>
-            <a href="/demo/job/postByScale/500/1000">500-1000人</a>
-            <a href="/demo/job/postByScale/1000/5000">1000-5000人</a>
-            <a href="/demo/job/postByScale/5000/-1">5000人以上</a>
-        </p>
-    </div>
-
-    <div>
-        <p class="p">
-            <span class="s1">职位名</span>
-            <span class="s2">公司名</span>
-            <span class="s3">公司地址</span>
-            <span class="s4">薪资</span>
-            <span class="s5">发布时间</span>
-        </p>
-        <div th:each="job : ${jobs}">
-            <p class="p">
-                <a th:href="@{'/job/postInfoIndex/'+${job.getJid()}}"><span class="s1" th:text="${job.jname}"></span></a>
-                <a href=""><span class="s2" th:text="${job.cname}"></span></a>
-                <span class="s3" th:text="${job.address}"></span>
-                <span class="s4" th:text="${job.payment}+'K'"></span>
-                <span class="s5" th:text="${#temporals.format(job.putDate,'MM-dd')}"></span>
-            </p>
+    <!-- Loader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
         </div>
     </div>
-</form>
-<script type="text/javascript" th:src="@{/js/jquery-1.12.4.js}"></script>
-<script type="text/javascript">
-    $(function () {
-        $(".d p a").click(function () {
-            $(this).css("color","red");
-            $(this).parent().children(":first").css("color","black");
+    <!-- Loader -->
+
+    <!-- Navigation Bar-->
+    <header id="topnav" class="defaultscroll scroll-active">
+        <!-- Tagline STart -->
+        <div class="tagline">
+            <div class="container">
+                <div class="float-left">
+                    <div class="phone">
+                        <i class="mdi mdi-phone-classic"></i> +1 800 123 45 67
+                    </div>
+                    <div class="email">
+                        <a href="#">
+                            <i class="mdi mdi-email"></i> Support@mail.com
+                        </a>
+                    </div>
+                </div>
+                <div class="float-right">
+                    <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
+                        <li class="list-inline-item"><a href="javascript:void(0);"><i class="mdi mdi-account mr-2"></i>Benny Simpson</a></li>
+                        <li class="list-inline-item">
+                            <select id="select-lang" class="demo-default">
+                                    <option value="">Language</option>
+                                    <option value="4">English</option>
+                                    <option value="1">Spanish</option>
+                                    <option value="3">French</option>
+                                    <option value="5">Hindi</option>
+                                </select>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!-- Tagline End -->
+
+        <!-- Menu Start -->
+        <div class="container">
+            <!-- Logo container-->
+            <div>
+                <a href="index.html" class="logo">
+                    <img src=" /demo/images/logo-light.png" alt="" class="logo-light" height="18" />
+                    <img src=" /demo/images/logo-dark.png" alt="" class="logo-dark" height="18" />
+                </a>
+            </div>                 
+            <div class="buy-button">
+                <a href="post-a-job.html" class="btn btn-primary"><i class="mdi mdi-cloud-upload"></i> Post a Job</a>
+            </div><!--end login button-->
+            <!-- End Logo container-->
+            <div class="menu-extras">
+                <div class="menu-item">
+                    <!-- Mobile menu toggle-->
+                    <a class="navbar-toggle">
+                        <div class="lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </a>
+                    <!-- End mobile menu toggle-->
+                </div>
+            </div>
+    
+            <div id="navigation">
+                <!-- Navigation Menu-->   
+                <ul class="navigation-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="has-submenu">
+                        <a href="javascript:void(0)">Jobs</a><span class="menu-arrow"></span>
+                        <ul class="submenu">
+                            <li><a href="postList.html">Job List</a></li>
+                            <li><a href="job-grid.html">Job Grid</a></li>
+                            <li><a href="postInfo.html">Job Details</a></li>
+                            <li><a href="job-details-2.html">Job Details-2</a></li>
+                        </ul>
+                    </li>
+    
+                    <li class="has-submenu">
+                        <a href="javascript:void(0)">Pages</a><span class="menu-arrow"></span>
+                        <ul class="submenu">
+                            <li><a href="about.html">About us</a></li>
+                            <li><a href="services.html">Services</a></li>
+                            <li><a href="team.html">Team</a></li>
+                            <li><a href="faq.html">Faqs</a></li>
+                            <li><a href="pricing.html">Pricing plans</a></li>
+                            <li class="has-submenu"><a href="javascript:void(0)"> Candidates</a><span class="submenu-arrow"></span>
+                                <ul class="submenu">
+                                    <li><a href="candidates-listing.html">Candidates Listing</a></li>
+                                    <li><a href="candidates-profile.html">Candidates Profile</a></li>
+                                    <li><a href="create-resume.html">Create Resume</a></li>
+                                </ul>  
+                            </li>
+                            <li class="has-submenu"><a href="javascript:void(0)"> Blog</a><span class="submenu-arrow"></span>
+                                <ul class="submenu">
+                                    <li><a href="blog-grid.html">Blogs</a></li>
+                                    <li><a href="blog-sidebar.html">Blog Sidebar</a></li>
+                                    <li><a href="blog-details.html">Blog Details</a></li>
+                                </ul>  
+                            </li>
+                            <li class="has-submenu"><a href="javascript:void(0)"> Employers</a><span class="submenu-arrow"></span>
+                                <ul class="submenu">
+                                    <li><a href="employers-list.html">Employers List</a></li>
+                                    <li><a href="company-detail.html">Company Detail</a></li>
+                                </ul>  
+                            </li>
+                            <li class="has-submenu"><a href="javascript:void(0)"> User Pages</a><span class="submenu-arrow"></span>
+                                <ul class="submenu">
+                                    <li><a href="login.html">Login</a></li>
+                                    <li><a href="signup.html">Signup</a></li>
+                                    <li><a href="recovery_passward.html">Forgot Password</a></li>
+                                </ul>  
+                            </li>
+                            <li><a href="components.html"> Components</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="contact.html">contact</a>
+                    </li>
+                </ul><!--end navigation menu-->
+            </div><!--end navigation-->
+        </div><!--end container-->
+        <!--end end-->
+    </header><!--end header-->
+    <!-- Navbar End -->
+    
+    <!-- Start home -->
+    <section class="bg-half page-next-level"> 
+        <div class="bg-overlay"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="text-center text-white">
+                        <h4 class="text-uppercase title mb-4">Job List view</h4>
+                        <ul class="page-next d-inline-block mb-0">
+                            <li><a href="index.html" class="text-uppercase font-weight-bold">Home</a></li>
+                            <li><a href="#" class="text-uppercase font-weight-bold">Jobs</a></li> 
+                            <li>
+                                <span class="text-uppercase text-white font-weight-bold">Job Listing</span> 
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end home -->
+
+    <div class="container">
+        <div class="home-form-position">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="home-registration-form job-list-reg-form bg-light shadow p-4 mb-3">
+                        <form id="form" class="registration-form">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="registration-form-box">
+                                        <i class="fa fa-briefcase"></i>
+                                        <input th:name="jname" type="text" id="exampleInputName1" class="form-control rounded registration-input-box" placeholder="职位名">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="registration-form-box">
+                                        <i class="fa fa-location-arrow"></i>
+                                        <select id="select-country" class="demo-default" th:name="address">
+                                            <option th:each="c :${cities}" >
+                                                <span th:value="${c.cityname}" th:text="${c.cityname}"></span>
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="registration-form-box">
+                                        <button style="height: 45px" id="submit" name="send" class="submitBnt btn btn-primary btn-block">搜索</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JOB LIST START -->
+    <section class="section pt-0">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="section-title text-center mb-4 pb-2">
+                        <h4 class="title title-line pb-5">Available job for you</h4>
+                        <p class="text-muted para-desc mx-auto mb-1">Post a job to tell us about your project. We'll quickly match you with the right freelancers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="left-sidebar">
+                        <div class="accordion" id="accordionExample">
+                            <div class="card rounded mt-4">
+                                <a data-toggle="collapse" href="#collapseOne" class="job-list" aria-expanded="true" aria-controls="collapseOne">
+                                    <div class="card-header" id="headingOne">
+                                        <h6 class="mb-0 text-dark f-18">发布时间</h6>
+                                    </div>
+                                </a>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                                    <div class="card-body p-0">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" th:onclick="dayScreen(this)" th:attr="data-day=0">
+                                            <label class="custom-control-label ml-1 text-muted" for="customRadio1">所有</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" th:onclick="dayScreen(this)" th:attr="data-day=1">
+                                            <label class="custom-control-label ml-1 text-muted" for="customRadio2">24小时内</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input" th:onclick="dayScreen(this)" th:attr="data-day=3">
+                                            <label class="custom-control-label ml-1 text-muted" for="customRadio3">近三天</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input" th:onclick="dayScreen(this)" th:attr="data-day=7">
+                                            <label class="custom-control-label ml-1 text-muted" for="customRadio4">近一周</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio5" name="customRadio" class="custom-control-input" th:onclick="dayScreen(this)" th:attr="data-day=30">
+                                            <label class="custom-control-label ml-1 text-muted" for="customRadio5">近一月</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- collapse one end -->
+                            <div class="card rounded mt-4">
+                                <a data-toggle="collapse" href="#collapsetwo" class="job-list" aria-expanded="true" aria-controls="collapsetwo">
+                                    <div class="card-header" id="headingtwo">
+                                        <h6 class="mb-0 text-dark f-18">月薪范围</h6>
+                                    </div>
+                                </a>
+                                <div id="collapsetwo" class="collapse show" aria-labelledby="headingtwo">
+                                    <div class="card-body p-0">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio7" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=0,data-max=-1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio7">所有</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio8" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=0.1,data-max=5">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio8">5千以下</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio9" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=5,data-max=8">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio9">5-8千</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio10" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=8,data-max=12">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio10">8-1.2万</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio11" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=12,data-max=18">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio11">1.2-1.8万</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio12" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=18,data-max=25">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio12">1.8-2.5万</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio13" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=25,data-max=50">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio13">2.5-5万</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio14" name="customRadio1" class="custom-control-input" th:onclick="payScreen(this)" th:attr="data-min=50,data-max=-1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio14">5万以上</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- collapse one end -->
+                            <div class="card rounded mt-4">
+                                <a data-toggle="collapse" href="#collapsethree" class="job-list" aria-expanded="true" aria-controls="collapsethree">
+                                    <div class="card-header" id="headingthree">
+                                        <h6 class="mb-0 text-dark f-18">公司性质</h6>
+                                    </div>
+                                </a>
+                                <div id="collapsethree" class="collapse show" aria-labelledby="headingthree">
+                                    <div class="card-body p-0">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio15" name="customRadio2" class="custom-control-input" th:onclick="natureScreen(this)" th:attr="data-nature=0">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio15">所有</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio16" name="customRadio2" class="custom-control-input" th:onclick="natureScreen(this)" th:attr="data-nature=1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio16">国企</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio17" name="customRadio2" class="custom-control-input" th:onclick="natureScreen(this)" th:attr="data-nature=2">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio17">外资</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio18" name="customRadio2" class="custom-control-input" th:onclick="natureScreen(this)" th:attr="data-nature=3">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio18">上市公司</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio19" name="customRadio2" class="custom-control-input" th:onclick="natureScreen(this)" th:attr="data-nature=4">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio19">合资</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio20" name="customRadio2" class="custom-control-input" th:onclick="natureScreen(this)" th:attr="data-nature=5">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio20">民营</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio21" name="customRadio2" class="custom-control-input" th:onclick="natureScreen(this)" th:attr="data-nature=6">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio21">政府机关</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- collapse one end -->
+                            <div class="card rounded mt-4">
+                                <a data-toggle="collapse" href="#collapsefour" class="job-list" aria-expanded="true" aria-controls="collapsefour">
+                                    <div class="card-header" id="headingfour">
+                                        <h6 class="mb-0 text-dark f-18">工作年限</h6>
+                                    </div>
+                                </a>
+                                <div id="collapsefour" class="collapse show" aria-labelledby="headingfour">
+                                    <div class="card-body p-0">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio22" name="customRadio3" class="custom-control-input" th:onclick="yearScreen(this)" th:attr="data-min=-1,data-max=-1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio22">所有</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio23" name="customRadio3" class="custom-control-input" th:onclick="yearScreen(this)" th:attr="data-min=1,data-max=3">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio23">1-3年</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio24" name="customRadio3" class="custom-control-input" th:onclick="yearScreen(this)" th:attr="data-min=3,data-max=5">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio24">3-5年</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio25" name="customRadio3" class="custom-control-input" th:onclick="yearScreen(this)" th:attr="data-min=5,data-max=10">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio25">5-10年</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio26" name="customRadio3" class="custom-control-input" th:onclick="yearScreen(this)" th:attr="data-min=10,data-max=-1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio26">10年以上</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio27" name="customRadio3" class="custom-control-input" th:onclick="yearScreen(this)" th:attr="data-min=0,data-max=-1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio27">无需经验</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- collapse one end -->
+                            <div class="card rounded mt-4">
+                                <a data-toggle="collapse" href="#collapsefive" class="job-list" aria-expanded="true" aria-controls="collapsefive">
+                                    <div class="card-header" id="headingfive">
+                                        <h6 class="mb-0 text-dark f-18">学历要求</h6>
+                                    </div>
+                                </a>
+                                <div id="collapsefive" class="collapse show" aria-labelledby="headingfive">
+                                    <div class="card-body p-0">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio28" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='所有'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio28">所有</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio29" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='初中'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio29">高中以下</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio30" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='高中'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio30">高中/中专</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio31" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='大专'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio31">大专</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio32" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='本科'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio32">本科</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio33" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='硕士'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio33">硕士</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio34" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='博士'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio34">博士</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio35" name="customRadio1" class="custom-control-input" th:onclick="eduScreen(this)" th:attr="data-edu='无'">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio35">无学历要求</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- -->
+                            <div class="card rounded mt-4">
+                                <a data-toggle="collapse" href="#collapsesex" class="job-list" aria-expanded="true" aria-controls="collapsesex">
+                                    <div class="card-header" id="headingsex">
+                                        <h6 class="mb-0 text-dark f-18">公司规模</h6>
+                                    </div>
+                                </a>
+                                <div id="collapsesex" class="collapse show" aria-labelledby="headingsex">
+                                    <div class="card-body p-0">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio36" name="customRadio1" class="custom-control-input" th:onclick="scaleScreen(this)" th:attr="data-min=0,data-max=-1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio36">所有</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio37" name="customRadio1" class="custom-control-input" th:onclick="scaleScreen(this)" th:attr="data-min=1,data-max=50">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio37">少于50人</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio38" name="customRadio1" class="custom-control-input" th:onclick="scaleScreen(this)" th:attr="data-min=50,data-max=150">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio38">50-150人</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio39" name="customRadio1" class="custom-control-input" th:onclick="scaleScreen(this)" th:attr="data-min=150,data-max=500">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio39">150-500人</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio40" name="customRadio1" class="custom-control-input" th:onclick="scaleScreen(this)" th:attr="data-min=500,data-max=1000">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio40">500-1000人</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio41" name="customRadio1" class="custom-control-input" th:onclick="scaleScreen(this)" th:attr="data-min=1000,data-max=5000">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio41">1000-5000人</label>
+                                        </div>
+
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio42" name="customRadio1" class="custom-control-input" th:onclick="scaleScreen(this)" th:attr="data-min=5000,data-max=-1">
+                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio42">5000人以上</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 mt-4 pt-2">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <div class="show-results">
+                                <div class="float-left">
+                                    <h5 class="text-dark mb-0 pt-2 f-18">Showing results 0-20</h5>
+                                </div>
+                                <div class="sort-button float-right">
+                                    <select class="nice-select rounded">
+                                        <option data-display="Select">Nothing</option>
+                                        <option value="1">Web Developer</option>
+                                        <option value="2">PHP Developer</option>
+                                        <option value="3">Web Designer</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="addSrceen">
+                        <div class="col-lg-12 mt-4 pt-2" th:each="job : ${jobs}">
+                            <div class="job-list-box border rounded">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-2">
+                                            <div class="company-logo-img">
+                                                <img src=" /demo/images/featured-job/img-1.png" alt="" class="img-fluid mx-auto d-block">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-7 col-md-9">
+                                            <div class="job-list-desc">
+                                                <h6 class="mb-2"><a th:href="@{'/job/postInfoIndex/'+${job.getJid()}}" class="text-dark"><span  th:text="${job.jname}"></span></a></h6>
+                                                <p class="text-muted mb-0"><i class="mdi mdi-bank mr-2" th:text="${job.cname}"></i></p>
+                                                <ul class="list-inline mb-0">
+                                                    <li class="list-inline-item mr-3">
+                                                        <p class="text-muted mb-0"><i class="mdi mdi-map-marker mr-2" th:text="${job.address}"></i></p>
+                                                    </li>
+
+                                                    <li class="list-inline-item">
+                                                        <p class="text-muted mb-0"><i class="mdi mdi-clock-outline mr-2" th:text="${#temporals.format(job.putDate,'MM-dd')}"></i></p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3">
+                                            <div class="job-list-button-sm text-right">
+                                                <span class="badge badge-success"  th:text="${job.payment}+'K'"></span>
+                                                <div class="mt-3">
+                                                    <a href="#" class="btn btn-sm btn-primary" th:href="@{'/job/postInfoIndex/'+${job.getJid()}}">查看职位</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 mt-4 pt-2">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination job-pagination mb-0 justify-content-center">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                            <i class="mdi mdi-chevron-double-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">
+                                            <i class="mdi mdi-chevron-double-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- JOB LIST START -->
+
+    <!-- subscribe start -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-5">
+                    <div class="float-left position-relative notification-icon mr-2">
+                        <i class="mdi mdi-bell-outline text-primary"></i>
+                        <span class="badge badge-pill badge-danger">1</span>
+                    </div>
+                    <h5 class="mt-2 mb-0">Your Job Notification</h5>
+                </div>
+                <div class="col-lg-8 col-md-7 mt-4 mt-sm-0">
+                    <form>
+                        <div class="form-group mb-0">
+                            <div class="input-group mb-0">
+                                <input name="email" id="email" type="email" class="form-control" placeholder="Your email :" required="" aria-describedby="newssubscribebtn">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary submitBnt" type="submit" id="newssubscribebtn">Subscribe</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- subscribe end -->
+
+    <!-- footer start -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-12 mb-0 mb-md-4 pb-0 pb-md-2">
+                    <a href="javascript:void(0)"><img src=" /demo/images/logo-light.png" height="20" alt=""></a>
+                    <p class="mt-4">At vero eos et accusamus et iusto odio dignissim os ducimus qui blanditiis praesentium</p>
+                    <ul class="social-icon social list-inline mb-0">
+                        <li class="list-inline-item"><a href="#" class="rounded"><i class="mdi mdi-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#" class="rounded"><i class="mdi mdi-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#" class="rounded"><i class="mdi mdi-instagram"></i></a></li>
+                        <li class="list-inline-item"><a href="#" class="rounded"><i class="mdi mdi-google"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                    <p class="text-white mb-4 footer-list-title">Company</p>
+                    <ul class="list-unstyled footer-list">
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> About Us</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Media & Press</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Career</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Blog</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Pricing</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Marketing</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> CEOs </a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Agencies</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Our Apps</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                    <p class="text-white mb-4 footer-list-title">Resources</p>
+                    <ul class="list-unstyled footer-list">
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Support</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Terms</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Accounting </a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> Billing</a></li>
+                        <li><a href="#" class="text-foot"><i class="mdi mdi-chevron-right"></i> F.A.Q.</a></li>
+                    </ul>
+                </div>
+            
+                <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                    <p class="text-white mb-4 footer-list-title f-17">Business Hours</p>
+                    <ul class="list-unstyled text-foot mt-4 mb-0">
+                        <li>Monday - Friday : 9:00 to 17:00</li>
+                        <li class="mt-2">Saturday : 10:00 to 15:00</li>
+                        <li class="mt-2">Sunday : Day Off (Holiday)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- footer end -->
+    <hr>
+    <footer class="footer footer-bar">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="">
+                        <p class="mb-0">© 2019 Jobya. Design with <i class="mdi mdi-heart text-danger"></i> by Themesdesign.</p>
+                    </div>
+                </div>
+            </div>
+        </div><!--end container-->
+    </footer><!--end footer-->
+    <!-- Footer End -->
+
+    <!-- Back to top -->
+    <a href="#" class="back-to-top rounded text-center" id="back-to-top"> 
+        <i class="mdi mdi-chevron-up d-block"> </i> 
+    </a>
+    <!-- Back to top -->
+
+    <!-- javascript -->
+
+    <script src="/demo/js/bootstrap.bundle.min.js"></script>
+    <script src="/demo/js/jquery.easing.min.js"></script>
+    <script src="/demo/js/plugins.js"></script>
+
+    <!-- selectize js -->
+    <script src="/demo/js/selectize.min.js"></script>
+
+    <script src="/demo/js/jquery.nice-select.min.js"></script>
+
+    <script src="/demo/js/app.js"></script>
+    <script type="text/javascript">
+        
+        $(function () {
+            $("#submit").click(function () {
+                var jname = $("input[name='jname']").val();
+                var addressStr = $("#select-country option:selected").text();
+                var address = $.trim(addressStr);
+                $.post("/demo/job/search",{"jname":jname,"address":address},function (data) {
+                    addData(data);
+                },"json")
+            })
         })
-    })
-</script>
+        
+        function dayScreen(objInfo){
+            var day = $(objInfo).attr("data-day");
+            $.post("/demo/job/postByTime/"+day,function (data) {
+                addData(data);
+            },"json")
+        }
+
+
+        function payScreen(objInfo){
+            var min = $(objInfo).attr("data-min");
+            var max = $(objInfo).attr("data-max");
+            $.post("/demo/job/postByPay/"+min+"/"+max,function (data) {
+                addData(data);
+            },"json")
+        }
+
+        function natureScreen(objInfo){
+            var nature = $(objInfo).attr("data-nature");
+            $.post("/demo/job/postByNature/"+nature,function (data) {
+                addData(data);
+            },"json")
+        }
+
+        function yearScreen(objInfo){
+            var min = $(objInfo).attr("data-min");
+            var max = $(objInfo).attr("data-max");
+            $.post("/demo/job/postByYears/"+min+"/"+max,function (data) {
+                addData(data);
+            },"json")
+        }
+
+        function eduScreen(objInfo){
+            var edu = $(objInfo).attr("data-edu");
+            $.post("/demo/job/postByEdu/"+edu,function (data) {
+                addData(data);
+            },"json")
+        }
+
+        function scaleScreen(objInfo){
+            var min = $(objInfo).attr("data-min");
+            var max = $(objInfo).attr("data-max");
+            $.post("/demo/job/postByScale/"+min+"/"+max,function (data) {
+                addData(data);
+            },"json")
+        }
+
+
+        function addData(data) {
+            if(data != null && data != ""){
+                $("#addSrceen").children(":not(:last)").remove();
+                $.each(data,function (i,n) {
+                    $("#addSrceen").prepend(
+                        "<div class=\"col-lg-12 mt-4 pt-2\">\n" +
+                        "                            <div class=\"job-list-box border rounded\">\n" +
+                        "                                <div class=\"p-3\">\n" +
+                        "                                    <div class=\"row align-items-center\">\n" +
+                        "                                        <div class=\"col-lg-2\">\n" +
+                        "                                            <div class=\"company-logo-img\">\n" +
+                        "                                                <img src=\" /demo/images/featured-job/img-1.png\" alt=\"\" class=\"img-fluid mx-auto d-block\">\n" +
+                        "                                            </div>\n" +
+                        "                                        </div>\n" +
+                        "                                        <div class=\"col-lg-7 col-md-9\">\n" +
+                        "                                            <div class=\"job-list-desc\">\n" +
+                        "                                                <h6 class=\"mb-2\"><a th:href=\"@{'/job/postInfoIndex/'+"+n.jid+"}\" class=\"text-dark\"><span>"+n.jname+"</span></a></h6>\n" +
+                        "                                                <p class=\"text-muted mb-0\"><i class=\"mdi mdi-bank mr-2\"></i>"+n.cname+"</p>\n" +
+                        "                                                <ul class=\"list-inline mb-0\">\n" +
+                        "                                                    <li class=\"list-inline-item mr-3\">\n" +
+                        "                                                        <p class=\"text-muted mb-0\"><i class=\"mdi mdi-map-marker mr-2\"></i>"+n.address+"</p>\n" +
+                        "                                                    </li>\n" +
+                        "                                                    <li class=\"list-inline-item\">\n" +
+                        "                                                        <p class=\"text-muted mb-0\"><i class=\"mdi mdi-clock-outline mr-2\"></i>"+formatDate(n.putDate)+"</p>\n" +
+                        "                                                    </li>\n" +
+                        "                                                </ul>\n" +
+                        "                                            </div>\n" +
+                        "                                        </div>\n" +
+                        "                                        <div class=\"col-lg-3 col-md-3\">\n" +
+                        "                                            <div class=\"job-list-button-sm text-right\">\n" +
+                        "                                                <span class=\"badge badge-success\">"+payStr(n.payment)+"K"+"</span>\n" +
+                        "                                                <div class=\"mt-3\">\n" +
+                        "                                                    <a class=\"btn btn-sm btn-primary\" href=\"/demo/job/postInfoIndex/"+n.jid+">查看职位</a>\n" +
+                        "                                                </div>\n" +
+                        "                                            </div>\n" +
+                        "                                        </div>\n" +
+                        "                                    </div>\n" +
+                        "                                </div>\n" +
+                        "                            </div>\n" +
+                        "                        </div>"
+                    )
+                })
+            }else{
+                $("#addSrceen").children(":not(:last)").remove();
+                $("#addSrceen").prepend("<div class=\"col-lg-12 mt-4 pt-2\" style='text-align: center'>\n" +
+                    "                            <h4>当前查询没有职位信息</h4>\n" +
+                    "                        </div>");
+
+
+            }
+        }
+
+
+        function formatDate(localDate) {
+            var start = localDate.indexOf("-");
+            var end = localDate.indexOf("T");
+            var subDate = localDate.substring(start+1,end)
+            return subDate;
+        }
+
+
+        function payStr(pay) {
+            var paystr = pay.toString();
+            var payof = paystr.indexOf(".");
+            if(payof == -1){
+                pay = pay + ".0";
+            }
+            return pay;
+        }
+    </script>
 </body>
 </html>

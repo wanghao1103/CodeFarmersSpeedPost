@@ -36,7 +36,7 @@ public class ApplyController {
     private IWorkerService iWorkerService;
 
     @RequestMapping("/postApply/{jid}")
-    public String apply(@PathVariable("jid") Long jid, Model model, HttpSession session){
+    public String apply(@PathVariable("jid") Long jid, HttpSession session){
         Workuser user = (Workuser) session.getAttribute("wuser");
         Long wid = iWorkerService.queryWidByUserid(1L);
         int rel = iApplyService.insertApply(wid,jid);

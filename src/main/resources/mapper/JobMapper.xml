@@ -6,8 +6,8 @@
     </select>
 
     <select id="getJobListByQuery" resultMap="jList">
-        select j.*,c.cName cname,c.address address from rec_company c,rec_job j
-        <trim prefix="where" prefixOverrides="and" suffix="and c.cid=j.cid">
+        select j.*,c.cName cname,c.address address from rec_company c inner join rec_job j on c.cid = j.cid
+        <trim prefix="where" prefixOverrides="and">
             <if test="jname != null and jname != ''">
                 and j.jname like CONCAT('%',#{jname},'%')
             </if>
@@ -30,39 +30,39 @@
             <if test="address != null and address != ''">
                 and c.address like concat('%',#{address},'%')
             </if>
-            <if test="day > 0">
-                and putDate > DATE_FORMAT(DATE_SUB(NOW(),INTERVAL #{day} DAY),'%Y-%m-%d')
+            <if test="screen.day > 0">
+                and putDate > DATE_FORMAT(DATE_SUB(NOW(),INTERVAL #{screen.day} DAY),'%Y-%m-%d')
             </if>
             <choose>
-                <when test="min>0 and max &lt;=50">
-                    and payment>#{min} and payment&lt;=#{max}
+                <when test="screen.min>0 and screen.max &lt;=50">
+                    and payment>#{screen.min} and payment&lt;=#{screen.max}
                 </when>
-                <when test="min == 50 and max==-1">
+                <when test="screen.min == 50 and screen.max==-1">
                     and payment >50
                 </when>
             </choose>
-            <if test="natureid>0">
-                and natureid = #{natureid}
+            <if test="screen.natureid>0">
+                and natureid = #{screen.natureid}
             </if>
             <choose>
-                <when test="minyears >0 and maxyears>0 ">
-                    and yearsReq >=#{minyears} and yearsReq &lt;#{maxyears}
+                <when test="screen.minyears >0 and screen.maxyears>0 ">
+                    and yearsReq >=#{screen.minyears} and yearsReq &lt;#{screen.maxyears}
                 </when>
-                <when test="minyears ==10 and maxyears ==-1">
-                    and yearsReq>#{minyears}
+                <when test="screen.minyears ==10 and screen.maxyears ==-1">
+                    and yearsReq>#{screen.minyears}
                 </when>
-                <when test="minyears ==0">
+                <when test="screen.minyears ==0">
                     and yearsReq = 0
                 </when>
             </choose>
-            <if test="education != null">
-                and educationReq = #{education}
+            <if test="screen.education != null">
+                and educationReq = #{screen.education}
             </if>
             <choose>
-                <when test="minscale > 0 and maxscale >0">
-                    and scale >#{minscale}
+                <when test="screen.minscale > 0 and screen.maxscale >0">
+                    and scale >#{screen.minscale}
                 </when>
-                <when test="minscale >5000 and maxscale ==-1">
+                <when test="screen.minscale >5000 and screen.maxscale ==-1">
                     and scale >5000
                 </when>
             </choose>
