@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" th:src="@{/js/jquery-1.12.4.js}"></script>
+</head>
+<style>
+    #sendBtn{
+        float:left;
+
+        min-width:20%;
+    }
+     *{
+         margin: 0px;
+         padding: 0px;
+         box-sizing: border-box;
+     }
+    .rg_layout{
+        width: 900px;
+        height: 500px;
+        border: 5px solid #EEEEEE;
+        background-color: white;
+        /*让div水平居中*/
+        margin: auto;
+        margin-top: 15px;
+    }
+    .rg_left{
+        float: left;
+        margin: 15px;
+        width: 20%;
+    }
+    .rg_left > p:first-child{
+        color: #FFD026;
+        font-size: 20px;
+    }
+    .rg_left > p:last-child{
+        color: #A6A6A6;
+    }
+    .rg_center{
+        /*border: 1px solid red;*/
+        float: left;
+        width: 450px;
+        /*margin: 15px;*/
+    }
+    .rg_right{
+        float: right;
+        margin: 15px;
+    }
+    .rg_right > p:first-child{
+        font-size: 15px;
+    }
+    .rg_right p a {
+        color: pink;
+    }
+    .td_left{
+        width: 100px;
+        text-align: right;
+        height: 45px;
+    }
+    .td_right{
+        padding-left: 50px;
+    }
+    #wuser,#wemail,#wphone,#yzm,#wpassword{
+        width: 251px;
+        height: 32px;
+        border: 1px solid #A6A6A6;
+        /*设置边框圆角*/
+        border-radius: 5px;
+        padding-left: 10px ;
+    }
+    span{
+        width: 150px;
+    }
+    #sendBtn{
+        width: 110px;
+        width: 150px;
+        height: 30px;
+        background-color: #ff3000;
+        border: 0;
+        border-radius: 15px;
+        color: #fff;
+    }
+    #btn_sub{
+        width: 380px;
+        height: 40px;
+        background-color: #FFD026;
+        border: 1px solid #FFD026;
+    }
+</style>
+<body>
+<div class="rg_layout">
+    <div class="rg_left">
+        <p>新用户注册</p>
+        <p>USER REGISTER</p>
+    </div>
+    <div class="rg_center">
+    <form>
+        <table>
+    <tr>
+        <td class="td_left">用户名</td>
+        <td><input class="td_right" type="text" name="wuser" id="wuser" placeholder="请输入用户名"></td>
+            <td><span  class="yongh"></span></td>
+    </tr>
+            <tr>
+                <td class="td_left">密码</td>
+                <td><input class="td_right" type="password" name="wpassword" id="wpassword" placeholder="请输入密码"></td>
+                <td> <span class="mima"></span></td>
+            </tr>
+    <tr>
+        <td class="td_left">E_mail</td>
+       <td><input class="td_right" type="email" name="wemail" id="wemail" placeholder="请输入邮箱"></td>
+        <td> <span class="youx"></span></td>
+    </tr>
+    <tr>
+        <td class="td_left">手机号</td>
+        <td><input class="td_right" type="text" name="wphone" placeholder="请输入手机号" autocomplete="off" id="wphone"></td>
+        <td> <span class="shouji"></span></td>
+    </tr>
+    <tr>
+        <td class="td_left">验证码</td>
+        <td><input name="verifyCode" id="yzm" maxlength="6" placeholder="请输入验证码"></td>
+      <td><input type="button" class="sendVerifyCode"  id="sendBtn"  onclick="sendCode(this)" value="获取验证码"/></td>
+    </tr>
+        </table>
+        <input colspan="2"  type="button" onclick="pan()" id="btn_sub" value="注册">
+</form>
+    </div>
+    <div class="rg_right">
+        <p>已有账号?<a href="/demo/workuser/user">立即登录</a></p>
+    </div>
+</div>
+<script type="text/javascript">
+    function sendCode(){
+       var wphone = $("#wphone").val();
+       if(wphone ==''){
+           alert("手机号不能为空")
+       }else {
+           $.ajax({
+               type: 'GET',
+               url: '/demo/workuser/fitness/code',
+               data: {
+                   wphone: wphone
+               },
+               dataType: 'json',
+               success: function (data) {
+                   if (data) {
+                       timer();
+                   } else {
+                       alert("获取验证码失败");
+                   }
+               },
+               error: function (data) {
+                   alert('连接超时！');
+               },
+           });
+       }
+    }
+    var wait = 60;
+    //倒计时
+    function timer() {
+        if(wait == 0){
+            $("#sendBtn").val("获取验证码");
+            $("#sendBtn").removeAttr("disabled");
+            wait = 60;
+        }else{
+            $("#sendBtn").attr("disabled","true");
+            $("#sendBtn").val(wait + "秒后重发");
+            wait--;
+            setTimeout(function() {timer()}, 1000);
+        }
+    }
+         function pan() {
+
+             var wemail = $("#wemail");
+             var wemailvar = $.trim(wemail.val());
+
+             var wphone = $("#wphone");
+             var wphonevar = $.trim(wphone.val());
+
+             var wuser = $("#wuser").val();
+
+             var wpassword = $("#wpassword").val();
+
+             var reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-_.])+[A-Za-z\d]{2,4}$/;
+
+             var phonreg = /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
+
+             var boolea = true;
+
+             if (wemail == '' || wemailvar == null) {
+                 $(".youx").html("邮箱不能为空");
+                 boolea = false
+             } else if (!reg.test(wemailvar)) {
+                 $(".youx").html("邮箱格式不正确");
+             } else {
+                 $(".youx").html("");
+             }
+
+             if (wphone == '' || wphonevar == null) {
+                 $(".shouji").html("手机号不能为空");
+                 boolea = false;
+             } else if (!phonreg.test(wphonevar)) {
+                 $(".shouji").html("手机号格式不正确");
+             } else {
+                 $(".shouji").html("");
+             }
+             if (wuser == '') {
+                 $(".yongh").html("用户名不能为空");
+                 boolea = false;
+             } else {
+                 $(".yongh").html("")
+             }
+             if (wpassword == '') {
+                 $(".mima").html("密码不能为空")
+                 boolea = false;
+             } else {
+                 $(".mima").html("");
+             }
+             if (boolea == true) {
+
+                 $.ajax({
+                     type: 'GET',
+                     url: '/CodeFarmersSpeedPost/workuser/add',
+                     data: {
+                         wphone: wphonevar,
+                         wemail: wemailvar,
+                         wuser: wuser,
+                         wpassword: wpassword
+                     },
+                     dataType: "json",
+                     success: function (data) {
+                         if (data.flag) {
+                             alert(data.msg);
+                             window.location.href = "index";
+                         } else {
+                             alert(data.msg);
+                             window.location.href = "login";
+                         }
+                     }
+
+                 });
+             }
+         };
+</script>
+</body>
+</html>
