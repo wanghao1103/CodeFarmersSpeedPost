@@ -4,6 +4,7 @@ package com.example.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.service.ICompanyuserService;
 import com.example.service.impl.CompanyuserServiceImpl;
 import com.example.util.VerifyCodeUtils;
 import com.zhenzi.sms.ZhenziSmsClient;
@@ -40,17 +41,17 @@ public class CompanyuserController {
     private String appId = "104774";
     private String appSecret = "ca1e812f-5be3-4604-8c8a-7b186cd65962";
     @Autowired
-    private CompanyuserServiceImpl companyuserServiceimpl;
+    private ICompanyuserService iCompanyuserService;
  @RequestMapping("/ente")
  public String qiye(){
      return "enterprise";
  }
  @RequestMapping("/user")
     public String login(String cuser, String cpassword, HttpSession session){
-        Companyuser companyuser = companyuserServiceimpl.Login(cuser, cpassword);
+        Companyuser companyuser = iCompanyuserService.Login(cuser, cpassword);
             if(companyuser!=null){
                 session.setAttribute("cuser",cuser);
-                return "workerlist";
+                return "redirect:/worker/getList";
             }
             return "redirect:ente";
  }
@@ -65,7 +66,7 @@ public class CompanyuserController {
 
         boolean flag = false;
         Map<String, Object> map = new HashMap<String,Object>();
-        int user = companyuserServiceimpl.tian(cuser, cpassword);
+        int user = iCompanyuserService.tian(cuser, cpassword);
         if (user > 0) {
             flag = true;
             map.put("flag", flag);
@@ -79,7 +80,7 @@ public class CompanyuserController {
     @RequestMapping("/prise")
     public String shou(String wphone,HttpSession session){
               session.setAttribute("cuser",wphone);
-                return "workerlist";
+                return "redirect:/worker/getList";
     }
     @RequestMapping("/code")
     public void getCode(HttpServletResponse res, HttpServletRequest req) throws Exception{

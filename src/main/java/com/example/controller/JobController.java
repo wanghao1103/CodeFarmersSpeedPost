@@ -2,6 +2,9 @@ package com.example.controller;
 
 
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.entity.City;
 import com.example.entity.Job;
 import com.example.entity.Jobneed;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -46,14 +51,33 @@ public class JobController {
     @Resource
     private ICityService iCityService;
 
-    private Screen screen = new Screen();
+    private Screen screen = null;
+
+    @RequestMapping("/goRegies")
+    public String goReg(){
+        return "redirect:/workuser/Login";
+    }
+
+    @RequestMapping("/goLogin")
+    public String goLogin(){
+        return "redirect:/workuser/user";
+    }
+
+    @RequestMapping("outLogin")
+    public String outLogin(HttpSession session){
+        session.removeAttribute("user");
+        return "redirect:/job/postIndex";
+    }
 
     @RequestMapping("/postIndex")
     public String postIndex(Model model){
+        screen = new Screen();
         List<City> cities = iCityService.list();
-        List<Job> jobs = iJobService.queryJobList();
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobList(page);
         model.addAttribute("cities",cities);
-        model.addAttribute("jobs",jobs);
+        model.addAttribute("jobs",iPage.getRecords());
+        model.addAttribute("iPage",iPage);
         return "postList";
     }
 
@@ -67,9 +91,12 @@ public class JobController {
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
         screen.setDay(day);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
-        System.out.println(JSONArray.toJSONString(jobs));
-        return JSONArray.toJSONString(jobs);
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobListScreen(page,jname, address, screen);
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
     }
 
     /**
@@ -83,8 +110,12 @@ public class JobController {
     public String query(@RequestParam("jname")String jname,@RequestParam("address")String address, HttpSession session){
         session.setAttribute("address",address);
         session.setAttribute("jname",jname);
-        List<Job> jobs = iJobService.queryJobListByQuery(jname, address);
-        return JSONArray.toJSONString(jobs);
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobListByQuery(page,jname, address);
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
     }
 
     /**
@@ -101,8 +132,12 @@ public class JobController {
         String address = (String) session.getAttribute("address");
         screen.setMax(max);
         screen.setMin(min);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address,screen);
-        return JSONArray.toJSONString(jobs);
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobListScreen(page,jname, address,screen);
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
     }
     @ResponseBody
     @RequestMapping("/postByNature/{natureid}")
@@ -110,8 +145,12 @@ public class JobController {
         String jname = (String) session.getAttribute("jname");
         String address = (String) session.getAttribute("address");
         screen.setNatureid(natureid);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
-        return JSONArray.toJSONString(jobs);
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobListScreen(page,jname, address,screen);
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
     }
     @ResponseBody
     @RequestMapping("/postByYears/{minyears}/{maxyears}")
@@ -120,8 +159,12 @@ public class JobController {
         String address = (String) session.getAttribute("address");
         screen.setMinyears(minyears);
         screen.setMaxyears(maxyears);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
-        return JSONArray.toJSONString(jobs);
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobListScreen(page,jname, address,screen);
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
     }
     @ResponseBody
     @RequestMapping(value = "/postByEdu/{edu}")
@@ -132,8 +175,12 @@ public class JobController {
             edu = null;
         }
         screen.setEducation(edu);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
-        return JSONArray.toJSONString(jobs);
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobListScreen(page,jname, address,screen);
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
     }
     @ResponseBody
     @RequestMapping("/postByScale/{min}/{max}")
@@ -142,8 +189,30 @@ public class JobController {
         String address = (String) session.getAttribute("address");
         screen.setMinscale(min);
         screen.setMaxscale(max);
-        List<Job> jobs = iJobService.queryJobListScreen(jname, address, screen);
-        return JSONArray.toJSONString(jobs);
+        Page<Job> page = new Page<>(1,3);
+        IPage<Job> iPage = iJobService.queryJobListScreen(page,jname, address,screen);
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
+    }
+
+    @ResponseBody
+    @RequestMapping("/page/{pagenum}")
+    public String page(@PathVariable("pagenum")int pagenum,HttpSession session){
+        Page<Job> page = new Page<>(pagenum,3);
+        IPage<Job> iPage=null;
+        String jname = (String) session.getAttribute("jname");
+        String address = (String) session.getAttribute("address");
+        if((jname == "" || jname ==null) && (address == "" || address ==null)){
+            iPage = iJobService.queryJobListScreen(page,jname,address,screen);
+        }else{
+            iPage = iJobService.queryJobListScreen(page,jname,address,screen);
+        }
+        Map map = new HashMap<>();
+        map.put("jobs",iPage.getRecords());
+        map.put("page",iPage.getPages());
+        return JSONArray.toJSONString(map);
     }
 
     /**
@@ -154,13 +223,17 @@ public class JobController {
     public String postInfoIndex(@PathVariable("jid")Long jid, Model model,HttpSession session){
         Job job = iJobService.queryJobById(jid);
         Jobneed jobneed = iJobneedService.queryJobneedByJid(jid);
-        Workuser user = (Workuser) session.getAttribute("wuser");
-        Long wid = iWorkerService.queryWidByUserid(1L);
+        Workuser user = (Workuser) session.getAttribute("user");
+        if(user == null){
+            return "redirect:/workuser/user";
+        }
+        Long wid = iWorkerService.queryWidByUserid(user.getUserid());
         int val= iApplyService.queryApply(wid,jid);
         System.out.println("val:"+val+"wid:"+wid+"jid"+jid);
         model.addAttribute("isApply",val);
         model.addAttribute("jobneed",jobneed);
         model.addAttribute("job",job);
         return "postInfo";
+
     }
 }

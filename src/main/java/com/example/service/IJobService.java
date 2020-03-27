@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.entity.Job;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.util.Screen;
@@ -16,9 +18,9 @@ import java.util.List;
  * @since 2020-03-05
  */
 public interface IJobService extends IService<Job> {
-    List<Job> queryJobListByQuery(String jname,String address);
-    List<Job> queryJobList();
-    List<Job> queryJobListScreen(String jname, String address, Screen screen);
+    IPage<Job> queryJobListByQuery(Page<Job> iPage, String jname, String address);
+    IPage<Job> queryJobList(Page<Job> iPage);
+    IPage<Job> queryJobListScreen(Page<Job> iPage,String jname, String address, Screen screen);
     Job queryJobById(Long jid);
 
 

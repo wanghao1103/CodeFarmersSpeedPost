@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en" class="no-"  xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -8,7 +9,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <meta name="author" content="Themesdesign" />
-    <script type="text/javascript" th:src="@{/js/jquery-1.12.4.js}"></script>
+    <script type="text/javascript" src="/demo/js/jquery-1.12.4.js"></script>
     <link rel="shortcut icon" href=" /demo/images/favicon.ico">
 
     <!-- Bootstrap core CSS -->
@@ -48,25 +49,20 @@
             <div class="container">
                 <div class="float-left">
                     <div class="phone">
-                        <i class="mdi mdi-phone-classic"></i> +1 800 123 45 67
                     </div>
                     <div class="email">
-                        <a href="#">
-                            <i class="mdi mdi-email"></i> Support@mail.com
+                        还没账号？
+                        <a href="/demo/job/goRegies" style="color:orangered;">
+                            去注册
                         </a>
                     </div>
                 </div>
                 <div class="float-right">
                     <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
-                        <li class="list-inline-item"><a href="javascript:void(0);"><i class="mdi mdi-account mr-2"></i>Benny Simpson</a></li>
+                        <li class="list-inline-item" th:if="${session.user ne null}"><a href="javascript:void(0);"><i class="mdi mdi-account mr-2"  th:text="${session.user.wuser}"></i></a></li>
+                        <li class="list-inline-item" th:if="${session.user eq null}"><a href="/demo/job/goLogin"><i class="mdi mdi-account mr-2" style="color: #0e90d2" th:text="登录"></i></a></li>
                         <li class="list-inline-item">
-                            <select id="select-lang" class="demo-default">
-                                    <option value="">Language</option>
-                                    <option value="4">English</option>
-                                    <option value="1">Spanish</option>
-                                    <option value="3">French</option>
-                                    <option value="5">Hindi</option>
-                                </select>
+                            <a href="/demo/job/outLogin" style="color: white" th:text="注销"> </a>
                         </li>
                     </ul>
                 </div>
@@ -163,9 +159,9 @@
         <!--end end-->
     </header><!--end header-->
     <!-- Navbar End -->
-    
+
     <!-- Start home -->
-    <section class="bg-half page-next-level"> 
+    <section class="bg-half page-next-level">
         <div class="bg-overlay"></div>
         <div class="container">
             <div class="row justify-content-center">
@@ -174,9 +170,9 @@
                         <h4 class="text-uppercase title mb-4">Job List view</h4>
                         <ul class="page-next d-inline-block mb-0">
                             <li><a href="index.html" class="text-uppercase font-weight-bold">Home</a></li>
-                            <li><a href="#" class="text-uppercase font-weight-bold">Jobs</a></li> 
+                            <li><a href="#" class="text-uppercase font-weight-bold">Jobs</a></li>
                             <li>
-                                <span class="text-uppercase text-white font-weight-bold">Job Listing</span> 
+                                <span class="text-uppercase text-white font-weight-bold">Job Listing</span>
                             </li>
                         </ul>
                     </div>
@@ -211,7 +207,7 @@
                                 </div>
                                 <div class="col-lg-3 col-md-6">
                                     <div class="registration-form-box">
-                                        <button style="height: 45px" id="submit" name="send" class="submitBnt btn btn-primary btn-block">搜索</button>
+                                        <button style="height: 45px" id="sub" name="send" class="submitBnt btn btn-primary btn-block">搜索</button>
                                     </div>
                                 </div>
                             </div>
@@ -514,23 +510,6 @@
                 </div>
 
                 <div class="col-lg-9 mt-4 pt-2">
-                    <div class="row align-items-center">
-                        <div class="col-lg-12">
-                            <div class="show-results">
-                                <div class="float-left">
-                                    <h5 class="text-dark mb-0 pt-2 f-18">Showing results 0-20</h5>
-                                </div>
-                                <div class="sort-button float-right">
-                                    <select class="nice-select rounded">
-                                        <option data-display="Select">Nothing</option>
-                                        <option value="1">Web Developer</option>
-                                        <option value="2">PHP Developer</option>
-                                        <option value="3">Web Designer</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="row" id="addSrceen">
                         <div class="col-lg-12 mt-4 pt-2" th:each="job : ${jobs}">
@@ -544,7 +523,7 @@
                                         </div>
                                         <div class="col-lg-7 col-md-9">
                                             <div class="job-list-desc">
-                                                <h6 class="mb-2"><a th:href="@{'/job/postInfoIndex/'+${job.getJid()}}" class="text-dark"><span  th:text="${job.jname}"></span></a></h6>
+                                                <h6 class="mb-2"><a th:href="@{'/job/postInfoIndex/'+${job.jid}}" class="text-dark"><span  th:text="${job.jname}"></span></a></h6>
                                                 <p class="text-muted mb-0"><i class="mdi mdi-bank mr-2" th:text="${job.cname}"></i></p>
                                                 <ul class="list-inline mb-0">
                                                     <li class="list-inline-item mr-3">
@@ -560,9 +539,6 @@
                                         <div class="col-lg-3 col-md-3">
                                             <div class="job-list-button-sm text-right">
                                                 <span class="badge badge-success"  th:text="${job.payment}+'K'"></span>
-                                                <div class="mt-3">
-                                                    <a href="#" class="btn btn-sm btn-primary" th:href="@{'/job/postInfoIndex/'+${job.getJid()}}">查看职位</a>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -577,10 +553,9 @@
                                             <i class="mdi mdi-chevron-double-left"></i>
                                         </a>
                                     </li>
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item" onclick="check(this)" th:each="pageNum : ${#numbers.sequence(1,iPage.getPages())}">
+                                        <a class="page-link" th:text="${pageNum}" ></a>
+                                    </li>
                                     <li class="page-item">
                                         <a class="page-link" href="#">
                                             <i class="mdi mdi-chevron-double-right"></i>
@@ -689,7 +664,27 @@
         </div><!--end container-->
     </footer><!--end footer-->
     <!-- Footer End -->
-
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>您还未登录，请先登录&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ons class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                    <a href="/zhike/tologin"><button type="button" class="btn btn-primary" >登录</button></a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
     <!-- Back to top -->
     <a href="#" class="back-to-top rounded text-center" id="back-to-top"> 
         <i class="mdi mdi-chevron-up d-block"> </i> 
@@ -698,7 +693,7 @@
 
     <!-- javascript -->
 
-    <script src="/demo/js/bootstrap.bundle.min.js"></script>
+    <script src="/demo/js/bootstrap.js"></script>
     <script src="/demo/js/jquery.easing.min.js"></script>
     <script src="/demo/js/plugins.js"></script>
 
@@ -709,9 +704,9 @@
 
     <script src="/demo/js/app.js"></script>
     <script type="text/javascript">
-        
+
         $(function () {
-            $("#submit").click(function () {
+            $("#sub").click(function () {
                 var jname = $("input[name='jname']").val();
                 var addressStr = $("#select-country option:selected").text();
                 var address = $.trim(addressStr);
@@ -720,6 +715,21 @@
                 },"json")
             })
         })
+
+        function modelBox(objInfo) {
+            $("#modal-default").modal("show");
+        }
+
+        function check(objInfo) {
+            $(objInfo).attr("class","page-item active");
+            $(objInfo).siblings().attr("class","page-item");
+            var pagenum = $(objInfo).children("a").text();
+            $.post("/demo/job/page/"+pagenum,function (data) {
+                addData(data);
+            },"json")
+        }
+
+
         
         function dayScreen(objInfo){
             var day = $(objInfo).attr("data-day");
@@ -769,9 +779,9 @@
 
 
         function addData(data) {
-            if(data != null && data != ""){
-                $("#addSrceen").children(":not(:last)").remove();
-                $.each(data,function (i,n) {
+            if(data.jobs!= null && data.jobs != ""){
+                $("#addSrceen").children().remove();
+                $.each(data.jobs,function (i,n) {
                     $("#addSrceen").prepend(
                         "<div class=\"col-lg-12 mt-4 pt-2\">\n" +
                         "                            <div class=\"job-list-box border rounded\">\n" +
@@ -784,7 +794,7 @@
                         "                                        </div>\n" +
                         "                                        <div class=\"col-lg-7 col-md-9\">\n" +
                         "                                            <div class=\"job-list-desc\">\n" +
-                        "                                                <h6 class=\"mb-2\"><a th:href=\"@{'/job/postInfoIndex/'+"+n.jid+"}\" class=\"text-dark\"><span>"+n.jname+"</span></a></h6>\n" +
+                        "                                                <h6 class=\"mb-2\"><a href=\"/demo/job/postInfoIndex/"+n.jid+"\" class=\"text-dark\"><span>"+n.jname+"</span></a></h6>\n" +
                         "                                                <p class=\"text-muted mb-0\"><i class=\"mdi mdi-bank mr-2\"></i>"+n.cname+"</p>\n" +
                         "                                                <ul class=\"list-inline mb-0\">\n" +
                         "                                                    <li class=\"list-inline-item mr-3\">\n" +
@@ -810,8 +820,37 @@
                         "                        </div>"
                     )
                 })
+
+
+                $("#addSrceen").append(
+                    " <div class=\"col-lg-12 mt-4 pt-2\">\n" +
+                    "                            <nav aria-label=\"Page navigation example\">\n" +
+                    "                                <ul class=\"pagination job-pagination mb-0 justify-content-center\">\n" +
+                    "                                    <li class=\"page-item disabled\">\n" +
+                    "                                        <a class=\"page-link\" href=\"#\" tabindex=\"-1\" aria-disabled=\"true\">\n" +
+                    "                                            <i class=\"mdi mdi-chevron-double-left\"></i>\n" +
+                    "                                        </a>\n" +
+                    "                                    </li>\n"
+                )
+                for (var i = 1 ; i <= data.page; i++){
+                    $("#addSrceen").append(
+                        " <li class=\"page-item\" onclick=\"check(this)\">\n" +
+                        "                                        <a class=\"page-link\">"+i+"</a>\n" +
+                        "                                    </li>"
+                    )
+                }
+                $("#addSrceen").append(
+                    "                                    <li class=\"page-item\">\n" +
+                    "                                        <a class=\"page-link\" href=\"#\">\n" +
+                    "                                            <i class=\"mdi mdi-chevron-double-right\"></i>\n" +
+                    "                                        </a>\n" +
+                    "                                    </li>\n" +
+                    "                                </ul>\n" +
+                    "                            </nav>\n" +
+                    "                        </div>"
+                )
             }else{
-                $("#addSrceen").children(":not(:last)").remove();
+                $("#addSrceen").children().remove();
                 $("#addSrceen").prepend("<div class=\"col-lg-12 mt-4 pt-2\" style='text-align: center'>\n" +
                     "                            <h4>当前查询没有职位信息</h4>\n" +
                     "                        </div>");

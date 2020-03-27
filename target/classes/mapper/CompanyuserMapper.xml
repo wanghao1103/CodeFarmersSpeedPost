@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.CompanyuserMapper">
-
+    <select id="Login" resultType="Companyuser">
+       SELECT cuser,cpassword FROM rec_companyuser
+        where cuser=#{cuser} and cpassword=#{cpassword}
+    </select>
+    <insert id="add" parameterType="Companyuser">
+INSERT INTO rec_companyuser (cuser,cpassword)VALUES(#{cuser},#{cpassword})
+</insert>
 </mapper>

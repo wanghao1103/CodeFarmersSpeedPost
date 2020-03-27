@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.WorkuserMapper">
-
+    <select id="Login" resultType="Workuser">
+        SELECT userid,wuser,wpassword,wphone,wemail,wregtime FROM rec_workuser
+        where wuser=#{wuser} and wpassword=#{wpassword}
+    </select>
+    <insert parameterType="Workuser" id="insert">INSERT INTO rec_workuser (wuser,wpassword,wphone,wemail)VALUES(#{wuser},#{wpassword},#{wphone},#{wemail}) </insert>
 </mapper>

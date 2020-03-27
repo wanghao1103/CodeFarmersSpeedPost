@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.Workuser;
+import com.example.service.IWorkuserService;
 import com.example.service.impl.WorkuserServiceImpl;
 import com.example.util.VerifyCodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class WorkuserController {
     private String appSecret = "ca1e812f-5be3-4604-8c8a-7b186cd65962";
 
         @Autowired
-        private WorkuserServiceImpl workuserServiceimpl;
+        private IWorkuserService iWorkuserService;
         @RequestMapping("/user")
         public String user(){
             return "loginbar ";
@@ -59,7 +60,7 @@ public class WorkuserController {
     public Object insert(String wuser, String wpassword, String wphone, String wemail, HttpSession HttpSession) {
         boolean flag = false;
         Map<String, Object> map = new HashMap<String,Object>();
-        int user = workuserServiceimpl.add(wuser, wpassword, wemail, wphone);
+        int user = iWorkuserService.add(wuser, wpassword, wemail, wphone);
         if (user > 0) {
 
             flag = true;
@@ -73,17 +74,16 @@ public class WorkuserController {
     }
         @GetMapping("/u")
         public String login(@RequestParam("wuser") String wuser,@RequestParam("wpassword") String wpassword,String verify_code,HttpSession session){
-                Workuser workuser = workuserServiceimpl.Login(wuser,wpassword);
+                Workuser workuser = iWorkuserService.Login(wuser,wpassword);
                     System.out.println(verify_code);
                 if(workuser!=null && verify_code!=null){
-                        session.setAttribute("wuser",wuser);
-                        return "postList";
+                        session.setAttribute("user",workuser);
+                        return "redirect:/job/postIndex";
                 }
             return "redirect:user";
         }
         @RequestMapping("/fiu")
         public String fincode(@RequestParam("wphone") String wphone,HttpSession session){
-                    session.setAttribute("wuser",wphone);
                    return "postList";
         }
         @RequestMapping("/shou")

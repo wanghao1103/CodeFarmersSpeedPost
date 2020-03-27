@@ -1,5 +1,7 @@
 package com.example.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.entity.Job;
 import com.example.mapper.JobMapper;
 import com.example.service.IJobService;
@@ -27,19 +29,19 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
     private JobMapper jobMapper;
 
     @Override
-    public List<Job> queryJobListByQuery(String jname, String address) {
-        return jobMapper.getJobListByQuery(jname,address);
+    public IPage<Job> queryJobListByQuery(Page<Job> page, String jname, String address) {
+        return jobMapper.getJobListByQuery(page,jname,address);
     }
 
     @Override
-    public List<Job> queryJobList() {
-        return jobMapper.getJobList();
+    public IPage<Job> queryJobList(Page<Job> page) {
+        return jobMapper.getJobList(page);
     }
 
 
     @Override
-    public List<Job> queryJobListScreen(String jname, String address, Screen screen) {
-        return jobMapper.getJobListScreen(jname, address, screen);
+    public IPage<Job> queryJobListScreen(Page<Job> page,String jname, String address, Screen screen) {
+        return jobMapper.getJobListScreen(page,jname, address, screen);
     }
 
     @Override
